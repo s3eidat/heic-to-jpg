@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'wasm-unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self'; media-src 'self' data: blob:; connect-src 'self' data: blob:; worker-src 'self' blob:; manifest-src 'self'; form-action 'none'; base-uri 'none'; object-src 'none'">
+<meta name="referrer" content="no-referrer">
+<title>HEIC to JPG — Free iPhone Photo Converter (HEIC to JPG, PNG, WebP) | S3eidat Tools</title>
+<meta name="description" content="Convert iPhone HEIC and HEIF photos to JPG, PNG or WebP in bulk, right in your browser. Quality slider, resize, zip download. Your photos are never uploaded.">
+<meta property="og:title" content="HEIC to JPG — convert iPhone photos privately">
+<meta property="og:description" content="Batch convert HEIC photos to JPG, PNG or WebP. Runs 100% in your browser.">
+<link rel="icon" href="kit/icon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="kit/kit.css">
+<link rel="stylesheet" href="app.css">
+<script src="kit/kit.js"></script>
+<!--s3:seo-->
+<link rel="canonical" href="https://s3eidat.github.io/heic-to-jpg/">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#0d0f12">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="S3eidat Tools">
+<meta property="og:url" content="https://s3eidat.github.io/heic-to-jpg/">
+<meta property="og:image" content="https://s3eidat.github.io/heic-to-jpg/screenshot.png">
+<meta property="og:image:width" content="1280"><meta property="og:image:height" content="800">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="HEIC to JPG — Convert iPhone HEIC photos to JPG">
+<meta name="twitter:description" content="Convert iPhone HEIC photos to JPG. Free, private and runs 100% in your browser: no sign-up, no uploads.">
+<meta name="twitter:image" content="https://s3eidat.github.io/heic-to-jpg/screenshot.png">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebApplication", "name": "HEIC to JPG", "url": "https://s3eidat.github.io/heic-to-jpg/", "description": "Convert iPhone HEIC photos to JPG. Free, private and runs 100% in your browser: no sign-up, no uploads.", "applicationCategory": "UtilitiesApplication", "operatingSystem": "Any (web browser)", "isAccessibleForFree": true, "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"}, "image": "https://s3eidat.github.io/heic-to-jpg/screenshot.png", "author": {"@type": "Person", "name": "s3eidat", "url": "https://github.com/s3eidat"}}</script>
+<!--/s3:seo-->
+</head>
+<body data-tool="heic-to-jpg">
+<main class="s3-main">
+  <section class="s3-hero">
+    <h1>HEIC to JPG</h1>
+    <p>Turn iPhone HEIC photos into JPG, PNG or WebP that open everywhere. Drop a whole batch, pick a quality, download them one by one or as a zip. The photos are converted on your device and never uploaded.</p>
+  </section>
+
+  <div class="hk-grid">
+    <section class="card stack">
+      <label class="drop" id="drop">
+        <input type="file" accept=".heic,.heif,.hif,image/heic,image/heif" multiple hidden>
+        <svg class="i"><use href="#i-upload"/></svg>
+        <b>Drop HEIC photos here</b>
+        <span class="faint">or click to choose · .heic and .heif</span>
+      </label>
+
+      <div class="stack">
+        <div class="hk-field">
+          <span class="hk-lbl" id="fmt-l">Convert to</span>
+          <div class="seg" id="format" role="group" aria-labelledby="fmt-l">
+            <button aria-pressed="true" data-v="jpeg">JPG</button>
+            <button aria-pressed="false" data-v="png">PNG</button>
+            <button aria-pressed="false" data-v="webp">WebP</button>
+          </div>
+        </div>
+        <label class="field" id="qfield">
+          <span class="row between"><span>Quality</span><output id="qv" class="mono">90%</output></span>
+          <input type="range" id="quality" min="10" max="100" step="1" value="90">
+        </label>
+        <label class="field">Max width / height
+          <select class="select" id="max">
+            <option value="">Keep full size</option>
+            <option value="4096">4096 px</option>
+            <option value="3000">3000 px</option>
+            <option value="2048">2048 px</option>
+            <option value="1600">1600 px</option>
+            <option value="1080">1080 px</option>
+          </select>
+        </label>
+        <p class="faint hk-note" id="hint">PNG is lossless (large files). JPG at 85–92% looks the same as the original for most photos.</p>
+        <p class="faint hk-note"><svg class="i"><use href="#i-lock"/></svg> The converted files carry no metadata: camera details and GPS location are not copied over.</p>
+      </div>
+    </section>
+
+    <section class="card stack">
+      <div class="row between">
+        <h2>Photos <small id="count"></small></h2>
+        <div class="row">
+          <button class="btn ghost small" id="clear" disabled><svg class="i"><use href="#i-trash"/></svg>Clear</button>
+          <button class="btn primary small" id="zip" disabled><svg class="i"><use href="#i-download"/></svg>Download all (.zip)</button>
+        </div>
+      </div>
+
+      <div class="empty" id="empty"><b>No photos yet</b>Drop HEIC files on the left. Each one is decoded with libheif (WebAssembly) inside this page.</div>
+
+      <figure class="hk-view checker" id="viewer" hidden>
+        <img id="preview" alt="Converted photo preview">
+        <figcaption class="hk-cap" id="cap"></figcaption>
+      </figure>
+
+      <div class="hk-prog" id="prog" hidden><span id="progBar"></span></div>
+      <ul class="hk-list" id="list"></ul>
+    </section>
+  </div>
+</main>
+<script src="sample.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
